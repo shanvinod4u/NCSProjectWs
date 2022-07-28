@@ -1,0 +1,5 @@
+FROM openjdk:8-jdk-alpine
+COPY target/QuizQuestionService-1.jar QuizQuestionService-1.jar
+CMD java -jar QuizQuestionService-1.jar
+
+

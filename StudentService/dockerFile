@@ -1,0 +1,3 @@
+FROM openjdk:8-jdk-alpine
+COPY target/StudentService-1.jar StudentService-1.jar
+CMD java -jar StudentService-1.jar

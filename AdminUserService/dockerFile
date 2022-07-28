@@ -1,0 +1,3 @@
+FROM openjdk:8-jdk-alpine
+COPY target/AdminUserService-1.jar AdminUserService-1.jar
+CMD java -jar AdminUserService-1.jar

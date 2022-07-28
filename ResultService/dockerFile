@@ -1,0 +1,3 @@
+FROM openjdk:8-jdk-alpine
+COPY target/ResultService-1.jar ResultService-1.jar
+CMD java -jar ResultService-1.jar

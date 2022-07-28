@@ -1,0 +1,28 @@
+server:
+  port: 8090
+
+
+eureka: 
+ instance:
+  hostname: localhost
+    
+spring:
+  application:
+    name: api-gateway
+  cloud: 
+   gateway: 
+    routes: 
+     - id: QuizApp-Admin-Service
+       uri: lb://QuizApp-Admin-Service 
+       predicates: 
+        - Path=/abc/admin/**
+     
+     - id: QuizApp-Student-Service
+       uri: lb://QuizApp-Student-Service 
+       predicates: 
+        - Path=/abc/student/**
+        
+     - id: QuizApp-Security-Service
+       uri: lb://QuizApp-Security-Service 
+       predicates: 
+        - Path=/abc/public/**

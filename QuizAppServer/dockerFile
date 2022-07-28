@@ -1,0 +1,3 @@
+FROM openjdk:8-jdk-alpine
+COPY target/QuizAppServer-1.jar QuizAppServer-1.jar
+CMD java -jar QuizAppServer-1.jar
