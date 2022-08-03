@@ -7,5 +7,6 @@ import com.ncs.capstone.quizquestion.model.Question;
 public interface QuizQuestionService {
 	
 	public List<Question> getQuestionByCategoryAndLevel(String category, int difficulty);
+	public Question getQuestionById(int id);
 
 }

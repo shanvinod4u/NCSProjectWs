@@ -10,7 +10,14 @@ spring:
   application:
     name: api-gateway
   cloud: 
-   gateway: 
+   gateway:
+    globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowedOriginPatterns: "*"
     routes: 
      - id: QuizApp-Admin-Service
        uri: lb://QuizApp-Admin-Service 
@@ -26,3 +33,5 @@ spring:
        uri: lb://QuizApp-Security-Service 
        predicates: 
         - Path=/abc/public/**
+    
+  

@@ -1,0 +1,85 @@
+<div class="text-center mt-5">
+    <h1>Update User</h1>
+</div>
+<div class="container mt-5">
+    <div class="card" style="padding: 20px;">
+<div style="width: 400px; margin: auto;">  
+        <form #userForm="ngForm" (ngSubmit)="userForm.form.valid && updateUser(userForm)">
+            <div class="form-group">
+                <input type="number"
+                  [(ngModel)] = "user.userId"
+                  name="userId"
+                  hidden
+                  id="userId"
+                  #userId="ngModel"
+                  class="form-control"/> 
+              </div>
+        <div class="form-group">
+          <label for="username" class="font-weight-bold">Username</label>
+          <input type="text"
+            [(ngModel)] = "user.username"
+            name="username"
+            id="username"
+            placeholder="Enter your username"
+            #name="ngModel"
+            [ngClass]="{'is-invalid': userForm.submitted && name.invalid}"
+            class="form-control" required/> 
+            <div *ngIf= "userForm.submitted && name.invalid">
+                <div *ngIf= "name.errors" class="text-danger">Username is not valid</div>
+            </div>
+        </div>
+  
+        <div class="form-group">
+            <label for="password" class="font-weight-bold">password</label>
+            <input type="password"
+              [(ngModel)] = "user.password"
+              name="password"
+              id="password"
+              placeholder="Enter your password"
+              #password="ngModel"
+              [ngClass]="{'is-invalid': userForm.submitted && password.invalid}"
+              class="form-control" required/>
+              <div *ngIf= "userForm.submitted && password.invalid">
+                <div *ngIf= "password.errors" class="text-danger">password is not valid</div>
+            </div>
+        </div>
+       
+
+        <div class="form-group">
+            <label for="email" class="font-weight-bold">Email</label>
+            <input type="text"
+              [(ngModel)] = "user.email"
+              name="email"
+              id="email"
+              placeholder="Enter your email"
+              #email="ngModel"
+              [ngClass]="{'is-invalid': userForm.submitted && email.invalid}"
+              class="form-control" required/>
+              <div *ngIf= "userForm.submitted && email.invalid">
+                <div *ngIf= "email.errors" class="text-danger">Email is not valid</div>
+            </div>
+
+        </div>
+     
+
+        <div class="form-group">
+            <label for="role" class="font-weight-bolder">Role</label>
+            <input type="text"
+              [(ngModel)] = "user.role"
+              name="role"
+              id="role"
+              placeholder="Enter your role"
+              #role="ngModel"
+              [ngClass]="{'is-invalid': userForm.submitted && role.invalid}"
+              class="form-control" required/>
+              <div *ngIf= "userForm.submitted && role.invalid">
+                <div *ngIf= "role.errors" class="text-danger">Role is not valid</div>
+            </div>
+        </div>
+        <div class="text-center">
+        <button class="btn btn-success mt-2">Submit</button>
+        </div>
+        </form>
+</div>
+</div>
+</div>

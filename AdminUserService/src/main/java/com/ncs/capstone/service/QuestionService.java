@@ -13,6 +13,7 @@ public interface QuestionService {
 	public Question addQuestion(Question q) throws InvalidQuestionException ;
 	public List<Question> getAllQuestions();
 	public Question updateQuestion(Question q);
+	public Question getQuestionById(int id);
 	public boolean deleteQuestionById(int id);
 	
 }

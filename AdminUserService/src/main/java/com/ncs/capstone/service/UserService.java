@@ -14,7 +14,7 @@ public interface UserService {
 	public User addUser(User u)throws InvalidUsernameException, InvalidEmailException;
 	public List<User> getAllUsers();
 	public User getUserById(int id);
-	public User updateUserRole(String role, int id);
+	public User updateUser(User u);
 	public boolean deleteUserById(int id);
 	
 }

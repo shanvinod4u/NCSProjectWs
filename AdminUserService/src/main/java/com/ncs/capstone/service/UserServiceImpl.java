@@ -57,14 +57,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User updateUserRole(String role, int id) {
+	public User updateUser(User u) {
 		
-		boolean status = userRepository.updateUserRole(role, id);
-		if(status == true) {
-			User user = userRepository.getById(id);
+			User user = userRepository.save(u);
 			return user;
-		}
-		return null;
 	}
 
 	@Override

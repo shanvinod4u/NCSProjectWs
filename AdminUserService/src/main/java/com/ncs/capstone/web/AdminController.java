@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.ncs.capstone.exception.InvalidEmailException;
+import com.ncs.capstone.exception.InvalidQuestionException;
 import com.ncs.capstone.exception.InvalidUsernameException;
 import com.ncs.capstone.model.Question;
 import com.ncs.capstone.model.TestScore;
@@ -49,213 +52,76 @@ public class AdminController {
 	}
 	
 	@PostMapping("user/addUser")
-	public ResponseEntity<User> addUser(@RequestBody @Valid User u,@RequestHeader(name = "Authorization") String token) 
-			throws Exception,InvalidUsernameException {
-		
-		String endPoint = "http://QuizApp-Security-Service/public/validate";
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", token);
-		headers.set("userType","admin");
+	public ResponseEntity<User> addUser(@RequestBody @Valid User u)throws InvalidUsernameException, InvalidEmailException {
 
-		HttpEntity<String> header = new HttpEntity<String>(headers);
-		ResponseEntity<Boolean> result = restTemplate.exchange(endPoint, HttpMethod.GET, header, Boolean.class);
-		//boolean result = restTemplate.getForObject(endPoint, header, Boolean.class);
-		
-		boolean jwtStatus = result.getBody();
-		
-		if(jwtStatus) {
 			User user = userService.addUser(u);
-			return new ResponseEntity<User>(user, HttpStatus.OK);
-		}else {
-			throw new Exception("Only Admin can access this service");
-		}
-		
+			return new ResponseEntity<User>(user, HttpStatus.OK);		
 	}
 	
 	@PostMapping("question/addQuestion")
-	public ResponseEntity<Question> addQuestion(@RequestBody @Valid Question q, User u,@RequestHeader(name = "Authorization") String token) throws Exception {
-		
-		String endPoint = "http://QuizApp-Security-Service/public/validate";
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", token);
-		headers.set("userType","admin");
+	public ResponseEntity<Question> addQuestion(@RequestBody @Valid Question q) throws InvalidQuestionException{
 
-		HttpEntity<String> header = new HttpEntity<String>(headers);
-		ResponseEntity<Boolean> result = restTemplate.exchange(endPoint, HttpMethod.GET, header, Boolean.class);
-		//boolean result = restTemplate.getForObject(endPoint, header, Boolean.class);
-		
-		boolean jwtStatus = result.getBody();
-		
-		if(jwtStatus) {
 		Question question = questionService.addQuestion(q);
 		return new ResponseEntity<Question>(question, HttpStatus.OK);
-		}else {
-			throw new Exception("Only Admin can access this service");
-		}
+		
 	}
 	
-	@PutMapping("user/updateRole/{role}/{id}")
-	public User updateRoleById(@PathVariable String role, @PathVariable int id, @RequestHeader(name = "Authorization") String token) throws Exception{
+	@PutMapping("user/updateUser")
+	public User updateRoleById(@RequestBody User u){
 		
-		String endPoint = "http://QuizApp-Security-Service/public/validate";
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", token);
-		headers.set("userType","admin");
-
-		HttpEntity<String> header = new HttpEntity<String>(headers);
-		ResponseEntity<Boolean> result = restTemplate.exchange(endPoint, HttpMethod.GET, header, Boolean.class);
-		//boolean result = restTemplate.getForObject(endPoint, header, Boolean.class);
-		
-		boolean jwtStatus = result.getBody();
-		
-		if(jwtStatus) {
-		User u = userService.getUserById(id);
-		User updatedUser = userService.updateUserRole(role, id);
+		User updatedUser = userService.updateUser(u);
 		return updatedUser;
-		}
-		else {
-		throw new Exception("Only Admin can access this service");
-	}
 		
 	}
 	
 	@PutMapping("/question/updateQuestion")
-	public Question updatedQuestion(@RequestBody Question q, @RequestHeader(name = "Authorization") String token) throws Exception {
+	public Question updatedQuestion(@RequestBody Question q) {
 		
-		String endPoint = "http://QuizApp-Security-Service/public/validate";
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", token);
-		headers.set("userType","admin");
-
-		HttpEntity<String> header = new HttpEntity<String>(headers);
-		ResponseEntity<Boolean> result = restTemplate.exchange(endPoint, HttpMethod.GET, header, Boolean.class);
-		//boolean result = restTemplate.getForObject(endPoint, header, Boolean.class);
-		
-		boolean jwtStatus = result.getBody();
-		
-		if(jwtStatus) {
 		Question updateQuestion = questionService.updateQuestion(q);
 		return updateQuestion;
-		}else {
-			throw new Exception("Only Admin can access this service");
-		}
+		
 	}
 	
 	@GetMapping("/user/{id}")
-	public User getUserById(@PathVariable int id, @RequestHeader(name = "Authorization") String token) throws Exception {
-		String endPoint = "http://QuizApp-Security-Service/public/validate";
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", token);
-		headers.set("userType","admin");
+	public User getUserById(@PathVariable int id)  {
 
-		HttpEntity<String> header = new HttpEntity<String>(headers);
-		ResponseEntity<Boolean> result = restTemplate.exchange(endPoint, HttpMethod.GET, header, Boolean.class);
-		//boolean result = restTemplate.getForObject(endPoint, header, Boolean.class);
-		
-		boolean jwtStatus = result.getBody();
-		if(jwtStatus) {
 		User user = userService.getUserById(id);
 		return user;
-		}else {
-			throw new Exception("Only Admin can access this service");
-		}
+		
+	}
+	
+	@GetMapping("/question/{id}")
+	public Question getQuestionById(@PathVariable int id) {
+		
+		Question question = questionService.getQuestionById(id);
+		return question;
 	}
 	
 	@GetMapping("/user/allUsers")
-	public List<User> getAllUsers(@RequestHeader(name = "Authorization") String token) throws Exception {
+	public List<User> getAllUsers() {
 		
-		String endPoint = "http://QuizApp-Security-Service/public/validate";
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", token);
-		headers.set("userType","admin");
-
-		HttpEntity<String> header = new HttpEntity<String>(headers);
-		ResponseEntity<Boolean> result = restTemplate.exchange(endPoint, HttpMethod.GET, header, Boolean.class);
-		//boolean result = restTemplate.getForObject(endPoint, header, Boolean.class);
-		
-		boolean jwtStatus = result.getBody();
-		if(jwtStatus) {
 		List<User> users = userService.getAllUsers();
 		return users;
-		}else {
-			throw new Exception("Only Admin can access this service");
-		}
 	}
 	
 	
 	@GetMapping("/question/allQuestions")
-	public List<Question> getAllQuestions(@RequestHeader(name = "Authorization") String token) throws Exception {
-		String endPoint = "http://QuizApp-Security-Service/public/validate";
+	public List<Question> getAllQuestions() {
 		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", token);
-		headers.set("userType","admin");
-
-		HttpEntity<String> header = new HttpEntity<String>(headers);
-		ResponseEntity<Boolean> result = restTemplate.exchange(endPoint, HttpMethod.GET, header, Boolean.class);
-		//boolean result = restTemplate.getForObject(endPoint, header, Boolean.class);
-		
-		boolean jwtStatus = result.getBody();
-		if(jwtStatus) {
 		List<Question> questions = questionService.getAllQuestions();
 		return questions;
-		}else {
-			throw new Exception("Only Admin can access this service");
-		}
 	}
 	
 	@GetMapping("/result/{category}")
-	public List<TestScore> getResultsByCategory(@PathVariable String category,@RequestHeader(name = "Authorization") String token) throws Exception {
-		
-		String endPoint = "http://QuizApp-Security-Service/public/validate";
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", token);
-		headers.set("userType","admin");
-
-		HttpEntity<String> header = new HttpEntity<String>(headers);
-		ResponseEntity<Boolean> result = restTemplate.exchange(endPoint, HttpMethod.GET, header, Boolean.class);
-		//boolean result = restTemplate.getForObject(endPoint, header, Boolean.class);
-		
-		boolean jwtStatus = result.getBody();
-		if(jwtStatus) {
+	public List<TestScore> getResultsByCategory(@PathVariable String category)  {
 		List<TestScore> list = restTemplate.getForObject("http://QuizApp-Result-Service/api/result/category/"+category, List.class);
 		return list;
-		}else {
-			throw new Exception("Only Admin can access this service");
-		}
 	}
 	
 	@DeleteMapping("/user/delete/{id}")
-	public List<User> deleteUserById(@PathVariable int id,@RequestHeader(name = "Authorization") String token) throws Exception{
+	public List<User> deleteUserById(@PathVariable int id){
 		
-		String endPoint = "http://QuizApp-Security-Service/public/validate";
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", token);
-		headers.set("userType","admin");
 
-		HttpEntity<String> header = new HttpEntity<String>(headers);
-		ResponseEntity<Boolean> result = restTemplate.exchange(endPoint, HttpMethod.GET, header, Boolean.class);
-		//boolean result = restTemplate.getForObject(endPoint, header, Boolean.class);
-		
-		boolean jwtStatus = result.getBody();
-		if(jwtStatus) {
 		boolean status = userService.deleteUserById(id);
 		
 		if(status == true) {
@@ -263,26 +129,11 @@ public class AdminController {
 			return users;
 		}
 		else return null;
-		}else {
-			throw new Exception("Only Admin can access this service");
-		}
 	}
 	
 	@DeleteMapping("/question/delete/{id}")
-	public List<Question> deleteQuestionById(@PathVariable int id,@RequestHeader(name = "Authorization") String token) throws Exception{
-	String endPoint = "http://QuizApp-Security-Service/public/validate";
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", token);
-		headers.set("userType","admin");
-
-		HttpEntity<String> header = new HttpEntity<String>(headers);
-		ResponseEntity<Boolean> result = restTemplate.exchange(endPoint, HttpMethod.GET, header, Boolean.class);
-		//boolean result = restTemplate.getForObject(endPoint, header, Boolean.class);
-		
-		boolean jwtStatus = result.getBody();
-		if(jwtStatus) {
+	public List<Question> deleteQuestionById(@PathVariable int id){
+	
 		boolean status = questionService.deleteQuestionById(id);
 		
 		if(status == true) {
@@ -290,10 +141,6 @@ public class AdminController {
 			return questions;
 		}
 		else return null;
-		}else {
-			throw new Exception("Only Admin can access this service");
-		}
 	}
-	
 
 }

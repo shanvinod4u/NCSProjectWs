@@ -24,6 +24,7 @@ public class CustomQuizQuestionRepositoryImpl implements CustomQuizQuestionRepos
 		
 		List<Question> list = q.getResultList();
 		
+		System.out.println(list);
 		return list;
 	}
 

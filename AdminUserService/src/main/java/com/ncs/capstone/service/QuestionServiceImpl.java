@@ -59,4 +59,11 @@ public class QuestionServiceImpl implements QuestionService {
 		return questions;
 	}
 
+	@Override
+	public Question getQuestionById(int id) {
+		
+		Question question = questionRepository.getById(id);
+		return question;
+	}
+
 }

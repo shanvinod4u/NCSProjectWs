@@ -3,6 +3,7 @@ package com.ncs.capstone.security.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -29,9 +30,10 @@ public class MyAppSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		 http.
+		http.cors();
+		http.
 
-		 	csrf().disable().cors().disable().
+		 	csrf().disable().
 			authorizeRequests().
 
 			antMatchers("/abc/public/**").permitAll().

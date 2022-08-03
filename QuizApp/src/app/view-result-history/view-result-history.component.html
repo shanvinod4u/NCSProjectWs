@@ -1,0 +1,25 @@
+<div class="text-center mt-5">
+    <h1>Result History</h1>
+</div>
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Category</th>
+            <th scope="col">Level</th>
+            <th scope="col">Total Score</th>
+            <th scope="col">Marks in %</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let ts of testScore">
+                <td>{{ts.date}}</td>
+                <td>{{ts.category}}</td>
+                <td>{{ts.level}}</td>
+                <td>{{ts.totalScore}}</td>
+                <td>{{ts.marks}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -3,6 +3,7 @@ package com.ncs.capstone.quizquestion.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,14 @@ public class QuizQuestionController {
 		
 		List<Question> list = quizQuestionService.getQuestionByCategoryAndLevel(category, difficulty);
 		return list;
+	}
+	
+	@GetMapping("/questions/{id}")
+	public Question getQuestionById(@PathVariable int id) {
+		
+		Question question = quizQuestionService.getQuestionById(id);
+		return question;
+		
 	}
 
 }

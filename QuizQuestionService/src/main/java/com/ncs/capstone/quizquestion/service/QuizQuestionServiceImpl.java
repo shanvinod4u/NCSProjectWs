@@ -20,5 +20,11 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
 		List<Question> list = quizQuestionRepository.getQuestionByCategoryAndLevel(category, difficulty);
 		return list;
 	}
+
+	@Override
+	public Question getQuestionById(int id) {
+		Question question = quizQuestionRepository.getById(id);
+		return question;
+	}
 	
 }

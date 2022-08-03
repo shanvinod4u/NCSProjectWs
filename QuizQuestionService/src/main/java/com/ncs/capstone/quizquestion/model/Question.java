@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -26,6 +27,17 @@ public class Question implements Serializable, Comparable<Question> {
 	private String option4;
 	private String correctAnswer;
 	
+	@Transient
+	private String givenAnswer;
+	
+	public String getGivenAnswer() {
+		return givenAnswer;
+	}
+
+	public void setGivenAnswer(String givenAnswer) {
+		this.givenAnswer = givenAnswer;
+	}
+
 	public Question() {
 		super();
 		// TODO Auto-generated constructor stub

@@ -9,6 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,76 +39,27 @@ public class StudentController {
 	}
 	
 	@PostMapping("/submit/exam/{id}")
-	public TestScore addResult(@RequestBody TestScore ts, @PathVariable int id,@RequestHeader(name = "Authorization") String token) throws Exception {
-		String endPoint = "http://QuizApp-Security-Service/public/validate";
+	public TestScore addResult(@RequestBody List<Question> questions, @PathVariable int id){
 		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", token);
-		headers.set("userType","student");
-
-		HttpEntity<String> header = new HttpEntity<String>(headers);
-		ResponseEntity<Boolean> result = restTemplate.exchange(endPoint, HttpMethod.GET, header, Boolean.class);
-		//boolean result = restTemplate.getForObject(endPoint, header, Boolean.class);
-		
-		boolean jwtStatus = result.getBody();
-		
-		if(jwtStatus) {
-		TestScore savedTestScore = studentService.addResult(ts, id);
+		TestScore savedTestScore = studentService.addResult(questions, id);
 		return savedTestScore;
-		}else {
-			throw new Exception("Only Student can access this service");
-		}
 	}
 	
 	@GetMapping("/result/history/{id}")
-	public ResponseEntity<List<TestScoreResponseDTO>> getStudentExamHistory(@PathVariable int id,@RequestHeader(name = "Authorization") String token) throws Exception{
+	public ResponseEntity<List<TestScoreResponseDTO>> getStudentExamHistory(@PathVariable int id){
 		
-		String endPoint = "http://QuizApp-Security-Service/public/validate";
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", token);
-		headers.set("userType","student");
-
-		HttpEntity<String> header = new HttpEntity<String>(headers);
-		ResponseEntity<Boolean> result = restTemplate.exchange(endPoint, HttpMethod.GET, header, Boolean.class);
-		//boolean result = restTemplate.getForObject(endPoint, header, Boolean.class);
-		
-		boolean jwtStatus = result.getBody();
-		
-		if(jwtStatus) {
 		List<TestScoreResponseDTO> list = restTemplate.getForObject("http://QuizApp-Result-Service/api/result/user/"+id, List.class);
 		
 		return new ResponseEntity<List<TestScoreResponseDTO>>(list, HttpStatus.OK);
-		}else {
-			throw new Exception("Only Student can access this service");
-		}
+		
 	}
 
 	@GetMapping("/exam/{category}/{difficulty}")
-	public List<Question> getExamQuestions(@PathVariable String category, @PathVariable int difficulty,@RequestHeader(name = "Authorization") String token) throws Exception{
+	public List<Question> getExamQuestions(@PathVariable String category, @PathVariable int difficulty){
 		
-		String endPoint = "http://QuizApp-Security-Service/public/validate";
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", token);
-		headers.set("userType","student");
-
-		HttpEntity<String> header = new HttpEntity<String>(headers);
-		ResponseEntity<Boolean> result = restTemplate.exchange(endPoint, HttpMethod.GET, header, Boolean.class);
-		//boolean result = restTemplate.getForObject(endPoint, header, Boolean.class);
-		
-		boolean jwtStatus = result.getBody();
-		
-		if(jwtStatus) {
 		List<Question> list = 
 				restTemplate.getForObject("http://QuizApp-Question-Service/api/quizQuestion/questions/"+category+"/"+difficulty, List.class);
 		return list;
-		}else {
-			throw new Exception("Only Student can access this service");
-		}
 	}
 	
 }
